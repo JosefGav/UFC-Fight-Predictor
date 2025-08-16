@@ -4,40 +4,23 @@ from bs4 import BeautifulSoup  # HTML parser - reads and navigates HTML code fro
 import pandas as pd    # Data analysis library - creates tables/spreadsheets for our data
 import time           # Built-in Python library - lets us add delays between requests
 from typing import List, Dict  # Type hints - helps specify what data types functions expect
+from . import fetcher
 
 class UFCScraper:
     def __init__(self):
         # Constructor - runs when we create a new UFCScraper object
         # Store the main UFC Stats website URL so we can reuse it
         self.base_url = "http://ufcstats.com"
-        
-        # Headers make our scraper look like a real browser visiting the site
-        # Without this, some websites might block our requests
-        # This specific User-Agent string pretends we're using Chrome on Windows
-        self.headers = {
-            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36'
-        }
     
-    def get_page(self, url: str) -> BeautifulSoup:
+    def _get_page(self, url: str) -> BeautifulSoup:
         """Get and parse a webpage"""
-        try:
-            # requests.get() is like typing a URL in your browser and hitting enter
-            # We pass our headers to make it look like a real browser visit
-            response = requests.get(url, headers=self.headers)
-            
-            # raise_for_status() checks if the request worked (status code 200 = success)
-            # If there was an error (404, 500, etc.), it raises an exception
-            response.raise_for_status()
-            
-            # BeautifulSoup takes the HTML content and makes it easy to search through
-            # 'html.parser' tells it how to interpret the HTML code
-            return BeautifulSoup(response.content, 'html.parser')
-            
-        except requests.RequestException as e:
-            # If anything goes wrong (no internet, website down, etc.), print error
-            # RequestException catches all possible request-related errors
-            print(f"Error fetching {url}: {e}")
-            return None  # Return None so other functions know something went wrong
+        
+        html = fetcher.fetch_url(url)
+        if not html:
+            print(f"Failed to fetch page: {url}")
+            return None
+
+        return BeautifulSoup(html, "html.parser")
     
     
     def get_recent_events(self, limit: int = None) -> List[Dict]:
@@ -61,7 +44,7 @@ class UFCScraper:
                 events_url = f"{self.base_url}/statistics/events/completed?page={page}"
             
             # Use our get_page method to fetch and parse the events page
-            soup = self.get_page(events_url)
+            soup = self._get_page(events_url)
             
             # Check if get_page failed (returned None)
             if not soup:
@@ -154,7 +137,7 @@ class UFCScraper:
     def get_fight_details(self, fight_url: str) -> Dict:
         """Scrape individual fight details"""
         # Use our get_page method to fetch and parse a specific fight page
-        soup = self.get_page(fight_url)
+        soup = self._get_page(fight_url)
         
         # Check if the page loaded successfully
         if not soup:
@@ -227,7 +210,7 @@ if __name__ == "__main__":
     events_url = "http://ufcstats.com/statistics/events/completed"
     
     # Try to get the events page using our get_page method
-    soup = scraper.get_page(events_url)
+    soup = scraper._get_page(events_url)
     
     
     # Check if the page loaded successfully
@@ -244,7 +227,7 @@ if __name__ == "__main__":
         print("❌ Failed to connect to UFC Stats")
 
 
-    thing = scraper.get_recent_events(50)
+    thing = scraper.get_recent_events()
 
     if thing:
         print("sucessfully viewed recent fights")
