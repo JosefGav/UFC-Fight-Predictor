@@ -1,4 +1,4 @@
-import fetcher
+from . import fetcher
 from bs4 import BeautifulSoup
 from typing import Optional, Dict,Any
 from datetime import datetime

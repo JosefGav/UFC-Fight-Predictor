@@ -4,9 +4,9 @@ import pandas as pd    # Data analysis library - creates tables/spreadsheets for
 import time           # Built-in Python library - lets us add delays between requests
 from typing import List, Dict  # Type hints - helps specify what data types functions expect
 from bs4.element import Tag
-import fetcher
+from . import fetcher
 from typing import Optional
-from get_fighter import get_fighter_basic_stats
+from .get_fighter import get_fighter_basic_stats
 from datetime import datetime
 import random
 
