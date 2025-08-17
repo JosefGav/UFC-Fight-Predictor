@@ -1,4 +1,7 @@
-from . import fetcher
+try:
+    from . import fetcher
+except:
+    import fetcher
 from bs4 import BeautifulSoup
 from typing import Optional, Dict,Any
 from datetime import datetime
