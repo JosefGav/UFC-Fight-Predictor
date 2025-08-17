@@ -4,9 +4,14 @@ import pandas as pd    # Data analysis library - creates tables/spreadsheets for
 import time           # Built-in Python library - lets us add delays between requests
 from typing import List, Dict  # Type hints - helps specify what data types functions expect
 from bs4.element import Tag
-from . import fetcher
+
 from typing import Optional
-from .get_fighter import get_fighter_basic_stats
+try:
+    from .get_fighter import get_fighter_basic_stats
+    from . import fetcher
+except:
+    from get_fighter import get_fighter_basic_stats
+    import fetcher
 from datetime import datetime
 import random
 
@@ -298,19 +303,22 @@ def get_fight_stats(fight_url: str,*,location:str,date:str) -> Optional[dict]:
     # find the <i> tag that signifies the winner
     winner_status = fight_soup.find("i", class_="b-fight-details__person-status_style_green")
 
-    # get the parent <div class="b-fight-details__person">
-    winner_div = winner_status.find_parent("div", class_="b-fight-details__person")
+    if winner_status is not None:
+        # get the parent <div class="b-fight-details__person">
+        winner_div = winner_status.find_parent("div", class_="b-fight-details__person")
 
-    # find the fighter name link inside the winner_div
-    winner_name_tag = winner_div.find("a", class_="b-link b-fight-details__person-link")
+        # find the fighter name link inside the winner_div
+        winner_name_tag = winner_div.find("a", class_="b-link b-fight-details__person-link")
 
-    # get the text and strip it
-    winner_name = winner_name_tag.text.strip()
+        # get the text and strip it
+        winner_name = winner_name_tag.text.strip()
 
-    if (winner_name==fight["fighter_a_name"]):
-        fight["winner"] = "a"
+        if (winner_name==fight["fighter_a_name"]):
+            fight["winner"] = "a"
+        else:
+            fight["winner"] = "b"
     else:
-        fight["winner"] = "b"
+        fight["winner"] = None
 
 
     # Extract all fight statistics from UFC stats page into a dictionary

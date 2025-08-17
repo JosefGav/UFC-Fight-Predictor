@@ -4,7 +4,19 @@ from bs4 import BeautifulSoup  # HTML parser - reads and navigates HTML code fro
 import pandas as pd    # Data analysis library - creates tables/spreadsheets for our data
 import time           # Built-in Python library - lets us add delays between requests
 from typing import List, Dict  # Type hints - helps specify what data types functions expect
-from . import fetcher
+
+
+try:
+    # If running as part of a package
+    from .event_scraper import get_event_fights
+    from . import fetcher
+except ImportError:
+    # If running directly as a script
+    from event_scraper import get_event_fights
+    import fetcher
+
+from typing import Union,Optional
+
 
 class UFCScraper:
     def __init__(self):
@@ -23,18 +35,57 @@ class UFCScraper:
         return BeautifulSoup(html, "html.parser")
     
     
-    def get_recent_events(self, limit: int = None) -> List[Dict]:
-        """Scrape recent UFC events - FIXED VERSION"""
+    def get_recent_events(self, limit: Union[int,str] = None) -> Optional[List[Dict]]:
+        """
+        Scrape recent UFC events from the UFC Stats website with flexible limiting.
+
+        Parameters
+        ----------
+        limit : int or str or None, optional (default=None)
+            Controls how many events to scrape or how far back in time to scrape.
+            - If int `n`, scrapes up to `n` most recent events (must be > 1).
+            - If str (e.g., "up to 2018" or "January 6, 2018"), scrapes all events
+            until the given year (exclusive). Year must be >= 1993.
+            - If None, scrapes all available events (up to internal page limit).
+
+        Returns
+        -------
+        List[Dict]
+            List of dicts with keys:
+            - 'name': event name (str)
+            - 'date': event date (str)
+            - 'location': event location (str)
+            - 'url': event URL (str)
+            Returns empty list if no events found or invalid parameter given.
+        """
         
+        
+
         # Create empty list to store our event data
         events = []
         page = 1  # start on page 1
         
+        limit_is_string = type(limit) is str
+        limit_is_int = type(limit) is int
+
+        if limit_is_string:
+            limit+= 1
+
+        if limit_is_int and limit <= 1:
+            print("limit must be greater than 1")
+            return None
+        elif limit_is_string and int(limit.split()[2]) <1993:
+            print("limit date must not be older than 1993")
+            return None
+
         # Continue until we have enough events OR hit the limit of pages
         # while len(events) < limit: only if there is a limit
         while True:
-            if limit is not None and len(events) >= limit:
-                break
+            # if limit is not None and len(events)>1:
+            #     if limit_is_int and len(events) >= limit:
+            #         break
+            #     elif limit_is_string and int(limit.split()[2]) >= int(events[len(events)-1].get("date").split()[2]):
+            #         break
             print(f"Scraping page {page}...")
             
             # Build the URL for the completed events page
@@ -85,6 +136,11 @@ class UFCScraper:
 
                             # 
                             event_date = event_date_tag.text.strip()
+
+                            # Stop if we've reached our limit (datewise)
+                            if limit is not None and limit_is_string and int(limit.split()[2]) >= int(event_date.split()[2]):
+                                print(f"Reached limit of year {limit} events - stopping")
+                                return events[1:]
                             
                             # Create a dictionary with all the event info
                             event_data = {
@@ -101,9 +157,10 @@ class UFCScraper:
                             print(f"Found event #{len(events)}: {event_name} on {event_date}")
                             
                             # Stop if we've reached our limit
-                            if limit is not None and len(events) >= limit:
+                            if limit is not None and type(limit) is int and len(events) >= limit:
                                 print(f"Reached limit of {limit} events - stopping")
-                                break
+                                return events[1:]
+                
                                 
                 except Exception as e:
                     print(f"Error parsing event row: {e}")
@@ -131,62 +188,29 @@ class UFCScraper:
         # Final summary
         print(f"Found {len(events)} total events across {page-1} pages")
         
-        # Return only the number of events requested
-        return events[:limit]
+        return events[1:]
     
-    def get_fight_details(self, fight_url: str) -> Dict:
-        """Scrape individual fight details"""
-        # Use our get_page method to fetch and parse a specific fight page
-        soup = self._get_page(fight_url)
-        
-        # Check if the page loaded successfully
-        if not soup:
-            return {}  # Return empty dictionary if page failed to load
-        
-        # Create empty dictionary to store all the fight information
-        # This will hold things like fighter names, stats, winner, method of victory, etc.
-        fight_data = {}
-        
-        # TODO: Parse fight statistics
-        # This is where you'll extract fighter stats, winner, etc.
-        # You'll search through the soup to find specific HTML elements
-        # containing the fight data you need
-        
-        return fight_data  # Return the dictionary with all fight info
-    
-    def scrape_recent_fights(self, num_events: int = 3):
-        """Main method to scrape recent fight data"""
-        # Print status message so user knows what's happening
-        print(f"Starting to scrape {num_events} recent events...")
-        
-        # Get the list of recent events using our get_recent_events method
-        events = self.get_recent_events(num_events)
-        
-        # Create empty list to store all fights from all events
-        # This will be our final dataset
+    def get_all_fight_data(self, limit: Union[int,str] = None) -> Optional[List[Dict]]:
         all_fights = []
         
-        # Loop through each event we found
-        # 'for event in events' means "do this for each event in our list"
-        for event in events:
-            # Add a 1-second delay between requests to be respectful to the website
-            # Without delays, we might get blocked for making requests too quickly
-            time.sleep(1)
-            
-            # Print which event we're currently processing
-            # .get('name', 'Unknown') safely gets the 'name' key from the event dictionary
-            # If 'name' doesn't exist, it returns 'Unknown' instead of crashing
-            print(f"Processing event: {event.get('name', 'Unknown')}")
-            
-            # TODO: Get fights for this event
-            # You'll need to visit the event page and find all the fight links
-            
-            # TODO: Process each fight
-            # For each fight link, call get_fight_details() and add to all_fights list
+        events = self.get_recent_events(limit)
+
+        if events is None:
+            return None
         
-        # Return the complete list of all fights from all events
+        for event in events:
+            event_url = event.get("url")
+            event_location = event.get("location")
+            event_date = event.get("date")
+            print("searching " + event.get("name"))
+
+            fight_card = get_event_fights(event_url,date=event_date,location=event_location)
+
+            all_fights.extend(fight_card) # adds new fights to list
+        
         return all_fights
-    
+
+
     @staticmethod
     def print_events (events: List[Dict]):
         print("\n" + "="*60)
@@ -227,7 +251,9 @@ if __name__ == "__main__":
         print("❌ Failed to connect to UFC Stats")
 
 
-    thing = scraper.get_recent_events()
+    # thing = scraper.get_recent_events(". . 1992")
+    thing = scraper.get_recent_events(10)
+
 
     if thing:
         print("sucessfully viewed recent fights")
