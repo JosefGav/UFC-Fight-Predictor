@@ -275,8 +275,30 @@ def get_fight_stats(fight_url: str,*,location:str,date:str) -> Optional[dict]:
     fight["date"] = datetime.strptime(date, '%B %d, %Y').strftime('%d/%m/%Y')
     fight["location"] = location
      
+    weight_class_text = fight_soup.find("i", class_="b-fight-details__fight-title").text
+    weight_class_text_lower = weight_class_text.lower() # Extract weight class text and convert to lowercase for consistent comparison
+    
+    weight_classes = [
+        'Bantamweight', 
+        'Featherweight', 
+        'Flyweight', 
+        'Heavyweight', 
+        'Light Heavyweight', 
+        'Lightweight', 
+        'Middleweight', 
+        'Welterweight', 
+        "Women's Bantamweight", 
+        "Women's Featherweight", 
+        "Women's Flyweight", 
+        "Women's Strawweight"
+    ]
 
-    weight_class = fight_soup.find("i", class_="b-fight-details__fight-title").text.split()[0]
+    weight_class = None
+
+    for wc in weight_classes:
+        if wc.lower() == weight_class_text_lower:
+            weight_class = wc
+            break
 
     fight["weight_class"] = weight_class
 
@@ -294,7 +316,7 @@ def get_fight_stats(fight_url: str,*,location:str,date:str) -> Optional[dict]:
     format = time.find_next_sibling("i")
 
     # extracts stats and adds them to fight dictionary
-    fight["victory_method"] = "".join(method.text.split()[1:])
+    fight["victory_method"] = " ".join(method.text.split()[1:])
     fight["final_round"] = round.text.split()[1]
     fight["finish_time"] = time.text.split()[1]
     fight["number_of_rounds"] = format.text.split()[2]

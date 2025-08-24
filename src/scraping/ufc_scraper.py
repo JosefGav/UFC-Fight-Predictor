@@ -67,9 +67,9 @@ class UFCScraper:
         
         limit_is_string = type(limit) is str
         limit_is_int = type(limit) is int
+        
 
-        if limit_is_string:
-            limit+= 1
+    
 
         if limit_is_int and limit <= 1:
             print("limit must be greater than 1")
@@ -81,11 +81,6 @@ class UFCScraper:
         # Continue until we have enough events OR hit the limit of pages
         # while len(events) < limit: only if there is a limit
         while True:
-            # if limit is not None and len(events)>1:
-            #     if limit_is_int and len(events) >= limit:
-            #         break
-            #     elif limit_is_string and int(limit.split()[2]) >= int(events[len(events)-1].get("date").split()[2]):
-            #         break
             print(f"Scraping page {page}...")
             
             # Build the URL for the completed events page
@@ -157,7 +152,7 @@ class UFCScraper:
                             print(f"Found event #{len(events)}: {event_name} on {event_date}")
                             
                             # Stop if we've reached our limit
-                            if limit is not None and type(limit) is int and len(events) >= limit:
+                            if limit is not None and type(limit) is int and len(events) >= limit+1:
                                 print(f"Reached limit of {limit} events - stopping")
                                 return events[1:]
                 
@@ -198,11 +193,11 @@ class UFCScraper:
         if events is None:
             return None
         
-        for event in events:
+        for i, event in enumerate(events):
             event_url = event.get("url")
             event_location = event.get("location")
             event_date = event.get("date")
-            print("searching " + event.get("name"))
+            print("searching " + event.get("name") + " " +str(i/len(events)*100)+"%")
 
             fight_card = get_event_fights(event_url,date=event_date,location=event_location)
 

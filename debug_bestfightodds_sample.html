@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html;charset=utf-8">
+    <meta name="description" content="UFC/MMA odds comparison service. Compare the latest UFC/MMA fight odds and betting lines from the top online sportsbooks">
+    <meta name="keywords" content="mma odds, mma betting, mma lines, ufc odds, ufc, mma, odds, betting">
+    <meta name="bfo-version" content="2024-02-15">
+    <meta property="og:image" content="https://www.bestfightodds.com/img/iconv2.jpg">
+            <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+            <link rel="preconnect" href="https://www.googletagmanager.com">
+    <link rel="preconnect" href="https://www.google-analytics.com">
+    <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
+    <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" media="print" onload="this.media='all'">
+    <noscript>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap">
+    </noscript>
+    <link rel="stylesheet" type="text/css" href="/css/bfo.min.css?v=0.3.14">
+    <link rel="shortcut icon" href="https://www.bestfightodds.com/favicon.ico">
+    <link rel="apple-touch-icon" sizes="144x144" href="/apple-touch-icon-144x144.png">
+    <link rel="apple-touch-icon" sizes="114x114" href="/apple-touch-icon-114x114.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="/apple-touch-icon-72x72.png">
+    <link rel="apple-touch-icon" href="/apple-touch-icon-iphone.png">
+    <!-- Google Tag Manager -->
+    <script>
+        (function(w, d, s, l, i) {
+            w[l] = w[l] || [];
+            w[l].push({
+                'gtm.start':
+
+                    new Date().getTime(),
+                event: 'gtm.js'
+            });
+            var f = d.getElementsByTagName(s)[0],
+
+                j = d.createElement(s),
+                dl = l != 'dataLayer' ? '&l=' + l : '';
+            j.async = true;
+            j.src =
+
+                'https://www.googletagmanager.com/gtm.js?id=' + i + dl;
+            f.parentNode.insertBefore(j, f);
+
+        })(window, document, 'script', 'dataLayer', 'GTM-WGLQH4ZQ');
+    </script>
+    <!-- End Google Tag Manager -->
+        <title>UFC &amp; MMA Odds &amp; Betting Lines | Best Fight Odds</title>
+</head>
+
+<body>
+    <script async src="/js/bfo.min.js?v=0.4.9"></script>
+    <div class="flex-header">
+        <div class="flex-header-wrap">
+            <a href="/"><img src="/img/logo_3.png" class="logo" width="290" height="54" alt="Best Fight Odds logo"></a>
+            <div id="header-search-box">
+                <form method="get" action="/search"><input type="text" id="search-box1" class="search-box" name="query" placeholder="MMA Event / Fighter"> <input type="submit" class="search-button" id="search-button" value="&#128269;"></form>
+            </div>
+        </div>
+    </div>
+    <div class="flex-nav">
+        <div class="flex-nav-wrap">
+            <div class="flex-header-menu">
+                <a href="/">
+                    <div class="header-menu-item  header-menu-selected " style="margin-left: 10px">Latest<span class="item-non-mob-mini"> odds</span></div>
+                </a>
+                <a href="/archive">
+                    <div class="header-menu-item ">Archive</div>
+                </a>
+                <a href="/alerts">
+                    <div class="header-menu-item ">Alerts</div>
+                </a>
+                <a href="/links">
+                    <div class="header-menu-item  item-non-mobile">Widget</div>
+                </a>
+                <a href="https://www.proboxingodds.com" target="_blank" rel="noopener">
+                    <div class="header-menu-item  item-non-mobile">Boxing</div>
+                </a>
+                <a href="https://twitter.com/bestfightodds" target="_blank" rel="noopener">
+                    <div class="header-menu-item">&#120143;</div>
+                </a>
+            </div>
+            <div id="flex-header-menu-right">
+                <div id="parlay-mode-container" >
+                    <a href="#" id="parlay-mode-box">
+                        <div class="bfo-check-box">✓</div> Parlay
+                    </a>
+                </div>
+                <div class="menu-divider"  style="display: none" ></div>
+                <div id="auto-refresh-container"  style="display: none" >
+                    <ul class="dropdown">
+                        <li><a href="#" onclick="toggleRefresh()" style="padding-left: 20px;"><img src="/img/refresh.png" class="refresh-ind" id="autoRefresh" alt="Toggle auto-refresh">&#9660;</a>
+                            <ul class="sub_menu">
+                                <li><a href="#" id="afSelectorOn" class="list-checked"><span style="display: inline-block">&#10004;</span>Auto-refresh: On</a></li>
+                                <li><a href="#" id="afSelectorOff"><span>&#10004;</span>Auto-refresh: Off</a></li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+                <div id="mob-divider" class="menu-divider"  style="display: none" ></div>
+                <div id="format-container">
+                    <ul class="dropdown">
+                        <li><a href="#" id="format-toggle-text"><span>Settings &#9660;</span></a>
+                            <ul class="sub_menu">
+                                                                <li><a href="#" id="formatSelector1" class="list-checked"><span style="display: inline-block">&#10003;</span>Moneyline</a></li>
+                                <li><a href="#" id="formatSelector2"><span>&#10003;</span>Decimal</a></li>
+                                <li><a href="#" id="formatSelector4"><span>&#10003;</span>Fractional</a></li>
+                                <li style="border-bottom: 1px solid #4a4c53"><a href="#" id="formatSelector3" style="display: inline"><span>&#10003;</span>Return on </a>$<input type="text" name="amountBox" id="format-amount-box1" maxlength="4" value="100" style="display: inline"></li>
+                                <li><a href="#" id="bookieHideSelector">Customize view</a></li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="flex-section">
+        <div class="flex-content-wrap">
+            
+    <div class="table-outer-wrapper"><div class="table-div" id="event3818"><div class="table-header"><a href="/events/ufc-3818"><h1>UFC</h1></a><span class="table-header-date">August 22nd</span><div class="share-area"><div class="share-button"></div></div><div class="share-window"><div data-href="https://twitter.com/intent/tweet?text=UFC+betting+lines&amp;url=https%3A%2F%2Fwww.bestfightodds.com%2Fevents%2Fufc-3818" class="share-item share-twitter"></div><div data-href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fwww.bestfightodds.com%2Fevents%2Fufc-3818" class="share-item share-facebook"></div><div data-href="whatsapp://send?text=UFC+betting+lines https%3A%2F%2Fwww.bestfightodds.com%2Fevents%2Fufc-3818" data-action="share/whatsapp/share" class="share-item share-whatsapp item-mobile-only"></div></div></div><table class="odds-table odds-table-responsive-header"><thead><tr><th scope="col"></th></tr></thead><tbody><tr id="mu-39542" ><th scope="row"><a href="/fighters/Bruna-Brasil-13778"><span class="t-b-fcc">Bruna Brasil</span></a></th></tr><tr  ><th scope="row"><a href="/fighters/Ming-Shi-17668"><span class="t-b-fcc">Ming Shi</span></a></th></tr><tr class="pr"><th scope="row">Over 1&#189; rounds</th></tr><tr class="pr"><th scope="row">Under 1&#189; rounds</th></tr><tr class="pr"><th scope="row">Over 2&#189; rounds</th></tr><tr class="pr"><th scope="row">Under 2&#189; rounds</th></tr><tr class="pr"><th scope="row">Fight goes to decision</th></tr><tr class="pr"><th scope="row">Fight doesn't go to decision</th></tr><tr id="mu-39543" ><th scope="row"><a href="/fighters/Nyamjargal-Tumendemberel-15865"><span class="t-b-fcc">Nyamjargal Tumendemberel</span></a></th></tr><tr  ><th scope="row"><a href="/fighters/Terrance-Saeteurn-15081"><span class="t-b-fcc">Terrance Saeteurn</span></a></th></tr><tr class="pr"><th scope="row">Over 1&#189; rounds</th></tr><tr class="pr"><th scope="row">Under 1&#189; rounds</th></tr><tr class="pr"><th scope="row">Over 2&#189; rounds</th></tr><tr class="pr"><th scope="row">Under 2&#189; rounds</th></tr><tr class="pr"><th scope="row">Fight goes to decision</th></tr><tr class="pr"><th scope="row">Fight doesn't go to decision</th></tr><tr id="mu-39583" ><th scope="row"><a href="/fighters/Ren-Yawei-19750"><span class="t-b-fcc">Ren Yawei</span></a></th></tr><tr   style="border-bottom: 0;" ><th scope="row"><a href="/fighters/Sangwook-Kim-19751"><span class="t-b-fcc">Sangwook Kim</span></a></th></tr></tbody></table><div class="table-inner-wrapper"><div class="table-inner-shadow-left"></div><div class="table-inner-shadow-right"></div><div class="table-scroller"><table class="odds-table"><thead><tr><th scope="col"></th><th scope="col" data-b="21"><a href="/out/21" onclick="lO(21,3818);">FanDuel</a></th><th scope="col" data-b="24"><a href="/out/24" onclick="lO(24,3818);">Caesars</a></th><th scope="col" data-b="23"><a href="/out/23" onclick="lO(23,3818);">BetMGM</a></th><th scope="col" data-b="25"><a href="/out/25" onclick="lO(25,3818);">BetRivers</a></th><th scope="col" data-b="20"><a href="/out/20" onclick="lO(20,3818);">BetWay</a></th><th scope="col" data-b="26"><span style="    color: #606060; padding-top: 6px; padding-bottom: 6px; height: 20px;">Unibet</span></th><th scope="col" data-b="22"><a href="/out/22" onclick="lO(22,3818);">DraftKi
